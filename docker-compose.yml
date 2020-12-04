@@ -1,0 +1,41 @@
+version: '2'
+services:
+  site:
+    build:
+      context: .
+    ports:
+      - "3001:3000"
+    links:
+      - db
+      - fs
+    volumes:
+      - .:/app
+      - .:/opt/jude
+    environment:
+      - MONGO_HOST=db
+      - WEED_HOST=fs
+
+  judge1:
+    build:
+      context: .
+    links:
+      - db
+      - fs
+    cap_add:
+      - ALL
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    entrypoint: "npm run start-judge"
+    environment:
+      - MONGO_HOST=db
+      - WEED_HOST=fs
+      - SANDBOX_OFFSET=0
+      - MAX_SIMUL_TESTS=3
+
+  db:
+    image: mongo
+
+  fs:
+    image: carmark/seaweedfs
+    command: "server -ip fs"

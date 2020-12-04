@@ -1,0 +1,19 @@
+version: '2'
+services:
+  site:
+    image: rsalesc/jude
+    #environment:
+      #- NODE_ENV=production
+    restart: always
+
+  judge1:
+    image: rsalesc/jude
+    #environment:
+      #- NODE_ENV=production
+    restart: always
+
+  db:
+    restart: always
+
+  fs:
+    restart: always
